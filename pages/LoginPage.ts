@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { LOGIN_PAGE_MESSAGES } from '../constants/loginPageMessages';
 
 export class LoginPage {
   readonly page: Page;
@@ -11,34 +12,58 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
     // 固化经过验证的稳定定位器
-    this.emailInput = page.getByPlaceholder('you@example.com');
+    this.emailInput = page.getByPlaceholder(LOGIN_PAGE_MESSAGES.EMAIL_PLACEHOLDER);
     this.passwordInput = page.locator('input[type="password"]');
-    this.signInButton = page.getByRole('button', { name: 'Sign in' });
+    this.signInButton = page.getByRole('button', { name: LOGIN_PAGE_MESSAGES.SIGN_IN_BUTTON_LABEL });
     // 语义化过滤定位，避开 Next.js 隐藏的读屏标签
     this.errorBanner = page.locator('p, span, div').filter({ 
-      hasText: /invalid email or password|invalid credentials|failed/i 
+      hasText: LOGIN_PAGE_MESSAGES.ERROR_INVALID_CREDENTIALS
     });
   }
 
-  // 1. 导航动作
+  /**
+   * Navigate to the login page
+   */
   async goto() {
     await this.page.goto(this.LOGIN_URL);
   }
 
-  // 2. 核心正向登录（带稳健的异步路由跳转等待）
-  async login(email: string, pass: string) {
+  /**
+   * Perform a login action with provided credentials
+   * Ensures proper async routing with deterministic URL navigation assertion
+   * 
+   * @param email - User email address (can use environment variables or test data)
+   * @param password - User password (can use environment variables or test data)
+   * @throws If credentials are not provided or login times out
+   */
+  async login(email: string, password: string) {
+    // Guard checks for required credentials
+    if (!email || !password) {
+      throw new Error(
+        'Login credentials are required. ' +
+        'email and password must be non-empty strings. ' +
+        'Consider using getSecureCredentials() from test-data/authData.ts'
+      );
+    }
+
     await this.emailInput.fill(email);
-    await this.passwordInput.fill(pass);
+    await this.passwordInput.fill(password);
     await Promise.all([
       this.page.waitForURL((url) => !url.pathname.endsWith('/login'), { timeout: 10000 }),
       this.signInButton.click(),
     ]);
   }
 
-  // 3. 失败或空输入登录提交（不触发正常页面跳转）
-  async submitCredentials(email?: string, pass?: string) {
+  /**
+   * Submit login form with optional credentials
+   * Does NOT wait for successful navigation (allows testing failed login scenarios)
+   * 
+   * @param email - Optional email to fill
+   * @param password - Optional password to fill
+   */
+  async submitCredentials(email?: string, password?: string) {
     if (email) await this.emailInput.fill(email);
-    if (pass) await this.passwordInput.fill(pass);
+    if (password) await this.passwordInput.fill(password);
     await this.signInButton.click();
   }
 }

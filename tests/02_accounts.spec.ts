@@ -1,18 +1,22 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
+import { getSecureCredentials } from '../test-data/authData';
 
 test.describe('Dashboard - Domain Test Suite', () => {
   let loginPage: LoginPage;
   let dashboardPage: DashboardPage;
 
   test.beforeEach(async ({ page }) => {
+    // Get credentials from secure environment variables
+    const { email, password } = getSecureCredentials();
+    
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
     
-    // Authenticate user before each test
+    // Authenticate user before each test using environment variable credentials
     await loginPage.goto();
-    await loginPage.login('casey@zinc.test', 'Passw0rd!');
+    await loginPage.login(email, password);
     
     // Verify dashboard is loaded
     await dashboardPage.expectLoaded();

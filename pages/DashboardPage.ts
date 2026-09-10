@@ -69,10 +69,14 @@ export class DashboardPage {
     // Verify navigation to dashboard
     await this.page.waitForURL(url => url.pathname.includes('/dashboard'), { timeout: 10000 });
     
-    // Verify page is responsive
-    await this.page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {
-      // Allow partial load if networkidle times out
-    });
+    // Verify page loads within reasonable timeout
+    // Using a more lenient check since network-dependent load can vary
+    try {
+      await this.page.waitForLoadState('networkidle', { timeout: 5000 });
+    } catch {
+      // If networkidle times out, we'll validate via element visibility instead
+      // This prevents flaky tests while ensuring critical elements are present
+    }
     
     // Verify critical header elements are visible
     await this.brandLogo.waitFor({ state: 'visible', timeout: 5000 });

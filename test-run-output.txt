@@ -1,0 +1,136 @@
+◇ injected env (3) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+Running 7 tests using 1 worker
+
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+  ✘  1 [chromium] › tests/01_auth.spec.ts:11:9 › Authentication Domain › AUTH-01: Positive Smoke Login › User Successfully Logs In with Valid Credentials (2.6s)
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+  ✓  2 [chromium] › tests/01_auth.spec.ts:49:9 › Authentication Domain › AUTH-02: Negative Login with Invalid Password › User Login Fails with Incorrect Password and Displays Error Message (1.3s)
+  ✘  3 [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials (3.5s)
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+  ✓  4 [chromium] › tests/01_auth.spec.ts:140:9 › Authentication Domain › AUTH-04: Secure Logout and Back-Navigation Redirect Protection › User Logs Out Successfully and Browser Back Button Does Not Restore Session (3.3s)
+  ✘  5 [chromium] › tests/02_accounts.spec.ts:25:7 › Dashboard - Domain Test Suite › DASH-AC-01: Global Navigation Invariants - Header, Navigation Items, and Logout Functionality (5.8s)
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+  ✘  6 [chromium] › tests/02_accounts.spec.ts:65:7 › Dashboard - Domain Test Suite › DASH-AC-02: User Greeting & Currency Format - Personalized Welcome and USD Currency Display (3.0s)
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+  ✓  7 [chromium] › tests/02_accounts.spec.ts:104:7 › Dashboard - Domain Test Suite › DASH-AC-03: Accounts Container & Activity Feed - Multiple Accounts and Transaction History (3.1s)
+
+
+  1) [chromium] › tests/01_auth.spec.ts:11:9 › Authentication Domain › AUTH-01: Positive Smoke Login › User Successfully Logs In with Valid Credentials 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading')
+    Expected: visible
+    Error: strict mode violation: getByRole('heading') resolved to 3 elements:
+        1) <h1 data-testid="dashboard-welcome" class="font-display text-3xl text-strong">Welcome, Casey</h1> aka getByTestId('dashboard-welcome')
+        2) <h2 class="smallcaps mb-3 text-xs tracking-[0.16em] text-subtle">Your accounts</h2> aka getByRole('heading', { name: 'Your accounts' })
+        3) <h2 class="font-display text-lg text-strong">Recent activity</h2> aka getByRole('heading', { name: 'Recent activity' })
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading') with timeout 5000ms
+      - waiting for getByRole('heading')
+
+
+      37 |       // Assertion: User name or profile identifier is visible on the page (confirming successful authentication)
+      38 |       // Use deterministic assertion instead of swallowing exceptions
+    > 39 |       await expect(page.getByRole('heading')).toBeVisible({ timeout: 5000 });
+         |                                               ^
+      40 |
+      41 |       // Assertion: No error messages or toast notifications are displayed
+      42 |       // Strict assertion - fail if any error is found
+        at /Users/maimaitituerxunwuerlika/agentic_cli_example/tests/01_auth.spec.ts:39:47
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-683d2-s-In-with-Valid-Credentials-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/01_auth-Authentication-Dom-683d2-s-In-with-Valid-Credentials-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-683d2-s-In-with-Valid-Credentials-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/01_auth-Authentication-Dom-683d2-s-In-with-Valid-Credentials-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('p, span, div').filter({ hasText: /email.*required|required.*email|invalid email/i }).first()
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('p, span, div').filter({ hasText: /email.*required|required.*email|invalid email/i }).first() with timeout 3000ms
+      - waiting for locator('p, span, div').filter({ hasText: /email.*required|required.*email|invalid email/i }).first()
+
+
+      117 |       // Look for error text near the email field (e.g., "Email is required")
+      118 |       const emailErrorMessage = page.locator('p, span, div').filter({ hasText: LOGIN_PAGE_MESSAGES.ERROR_INVALID_EMAIL }).first();
+    > 119 |       await expect(emailErrorMessage).toBeVisible({ timeout: 3000 });
+          |                                       ^
+      120 |
+      121 |       // Assertion: Validation error messages appear for Password field
+      122 |       // Look for error text near the password field (e.g., "Password is required")
+        at /Users/maimaitituerxunwuerlika/agentic_cli_example/tests/01_auth.spec.ts:119:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/02_accounts.spec.ts:25:7 › Dashboard - Domain Test Suite › DASH-AC-01: Global Navigation Invariants - Header, Navigation Items, and Logout Functionality 
+
+    Error: browserContext.close: ENOENT: no such file or directory, open '/Users/maimaitituerxunwuerlika/agentic_cli_example/test-results/.playwright-artifacts-2/traces/22dc79ce800ba94e95d1-779088ed4c40119f3910-recording2.trace'
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/02_accounts-Dashboard---Do-38cff-ms-and-Logout-Functionality-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/02_accounts-Dashboard---Do-38cff-ms-and-Logout-Functionality-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/02_accounts-Dashboard---Do-38cff-ms-and-Logout-Functionality-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/02_accounts-Dashboard---Do-38cff-ms-and-Logout-Functionality-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/02_accounts.spec.ts:65:7 › Dashboard - Domain Test Suite › DASH-AC-02: User Greeting & Currency Format - Personalized Welcome and USD Currency Display 
+
+    Error: browserContext.close: ENOENT: no such file or directory, open '/Users/maimaitituerxunwuerlika/agentic_cli_example/test-results/.playwright-artifacts-3/traces/22dc79ce800ba94e95d1-ffa31eb3dbab490a5286.network'
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/02_accounts-Dashboard---Do-37a17-me-and-USD-Currency-Display-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/02_accounts-Dashboard---Do-37a17-me-and-USD-Currency-Display-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/02_accounts-Dashboard---Do-37a17-me-and-USD-Currency-Display-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/02_accounts-Dashboard---Do-37a17-me-and-USD-Currency-Display-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › tests/01_auth.spec.ts:11:9 › Authentication Domain › AUTH-01: Positive Smoke Login › User Successfully Logs In with Valid Credentials 
+    [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials 
+    [chromium] › tests/02_accounts.spec.ts:25:7 › Dashboard - Domain Test Suite › DASH-AC-01: Global Navigation Invariants - Header, Navigation Items, and Logout Functionality 
+    [chromium] › tests/02_accounts.spec.ts:65:7 › Dashboard - Domain Test Suite › DASH-AC-02: User Greeting & Currency Format - Personalized Welcome and USD Currency Display 
+  3 passed (29.6s)
