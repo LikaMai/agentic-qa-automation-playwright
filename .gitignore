@@ -1,0 +1,21 @@
+
+# Dependencies
+node_modules/
+
+# Sensitive credentials & environment configs (DO NOT COMMIT!)
+.env
+.env.local
+.env.*.local
+
+# Playwright test reports & test execution artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+.playwright-cli/
+
+# System & editor cache files
+.DS_Store
+.vscode/
+.idea/
