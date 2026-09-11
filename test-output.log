@@ -1,0 +1,55 @@
+◇ injected env (3) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+
+Running 7 tests using 1 worker
+
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+  ✓  1 [chromium] › tests/01_auth.spec.ts:11:9 › Authentication Domain › AUTH-01: Positive Smoke Login › User Successfully Logs In with Valid Credentials (3.0s)
+  ✓  2 [chromium] › tests/01_auth.spec.ts:49:9 › Authentication Domain › AUTH-02: Negative Login with Invalid Password › User Login Fails with Incorrect Password and Displays Error Message (1.0s)
+  ✘  3 [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials (3.7s)
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+  ✓  4 [chromium] › tests/01_auth.spec.ts:140:9 › Authentication Domain › AUTH-04: Secure Logout and Back-Navigation Redirect Protection › User Logs Out Successfully and Browser Back Button Does Not Restore Session (3.4s)
+  ✓  5 [chromium] › tests/02_accounts.spec.ts:25:7 › Dashboard - Domain Test Suite › DASH-AC-01: Global Navigation Invariants - Header, Navigation Items, and Logout Functionality (3.3s)
+  ✓  6 [chromium] › tests/02_accounts.spec.ts:65:7 › Dashboard - Domain Test Suite › DASH-AC-02: User Greeting & Currency Format - Personalized Welcome and USD Currency Display (2.9s)
+  ✓  7 [chromium] › tests/02_accounts.spec.ts:104:7 › Dashboard - Domain Test Suite › DASH-AC-03: Accounts Container & Activity Feed - Multiple Accounts and Transaction History (2.6s)
+
+
+  1) [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('p, span, div').filter({ hasText: /email.*required|required.*email|email is required/i }).first()
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('p, span, div').filter({ hasText: /email.*required|required.*email|email is required/i }).first() with timeout 3000ms
+      - waiting for locator('p, span, div').filter({ hasText: /email.*required|required.*email|email is required/i }).first()
+
+
+      118 |       const emailErrorMessage = page.locator('p, span, div').filter({ hasText: LOGIN_PAGE_MESSAGES.ERROR_EMAIL_REQUIRED }).first();
+      119 |       // Assertion: Email validation error is visible when field is empty
+    > 120 |       await expect(emailErrorMessage).toBeVisible({ timeout: 3000 });
+          |                                       ^
+      121 |
+      122 |       // Assertion: Validation error messages appear for Password field
+      123 |       // Look for error text near the password field (e.g., "Password is required")
+        at /Users/maimaitituerxunwuerlika/agentic_cli_example/tests/01_auth.spec.ts:120:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/01_auth-Authentication-Dom-5ab39-ogin-with-Empty-Credentials-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests/01_auth.spec.ts:93:9 › Authentication Domain › AUTH-03: Client-Side Validation with Empty Fields › Validation Prevents Login with Empty Credentials 
+  6 passed (24.4s)

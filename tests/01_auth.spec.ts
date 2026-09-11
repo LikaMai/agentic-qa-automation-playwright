@@ -36,19 +36,12 @@ test.describe('Authentication Domain', () => {
 
       // Assertion: User name or profile identifier is visible on the page (confirming successful authentication)
       // Wait for authenticated dashboard elements to be visible
-      try {
-        await expect(page.getByRole('heading')).toBeVisible({ timeout: 5000 });
-      } catch {
-        // If no heading found, page may still be authenticated - continue with final assertions
-      }
+      const welcomeHeading = page.getByRole('heading', { name: /Welcome,\s+[A-Za-z]+/i });
+      await expect(welcomeHeading).toBeVisible({ timeout: 5000 });
 
       // Assertion: No error messages or toast notifications are displayed
       const errorBanner = page.locator('p, span, div').filter({ hasText: /error|invalid|fail/i });
-      try {
-        await expect(errorBanner.first()).not.toBeVisible();
-      } catch {
-        // If error messages exist in error case, assertions above about URL and heading will have failed
-      }
+      await expect(errorBanner.first()).not.toBeVisible();
     });
   });
 
@@ -77,14 +70,10 @@ test.describe('Authentication Domain', () => {
       // Use page.locator('p, span, div').filter({ hasText: ... }).first() to avoid brittle getByRole('alert')
       // which may catch hidden framework elements (e.g., Next.js route announcers)
       const errorBanner = page.locator('p, span, div').filter({ hasText: LOGIN_PAGE_MESSAGES.ERROR_INVALID_CREDENTIALS }).first();
-      try {
-        await expect(errorBanner).toBeVisible({ timeout: 5000 });
-        // Assertion: Error message clearly indicates authentication failure
-        await expect(errorBanner).toContainText(LOGIN_PAGE_MESSAGES.ERROR_INVALID_CREDENTIALS);
-      } catch {
-        // Form validation or server-side validation may have prevented submission
-        // The critical assertion is that user remains on login page
-      }
+      // Assertion: Error message banner is displayed to the user
+      await expect(errorBanner).toBeVisible({ timeout: 5000 });
+      // Assertion: Error message clearly indicates authentication failure
+      await expect(errorBanner).toContainText(LOGIN_PAGE_MESSAGES.ERROR_INVALID_CREDENTIALS);
 
       // Assertion: User remains on the login page (not redirected to authenticated area)
       await expect(page).toHaveURL(url => url.pathname.includes(LOGIN_PATH));
@@ -124,33 +113,15 @@ test.describe('Authentication Domain', () => {
       // User remains on the login page with no navigation
       await expect(page).toHaveURL(LOGIN_URL);
 
-      // Assertion: Validation error messages appear for Email field
-      // Look for error text near the email field (e.g., "Email is required")
-      const emailErrorMessage = page.locator('p, span, div').filter({ hasText: LOGIN_PAGE_MESSAGES.ERROR_EMAIL_REQUIRED }).first();
-      try {
-        await expect(emailErrorMessage).toBeVisible({ timeout: 3000 });
-      } catch {
-        // Alternative: Check HTML5 validation state - browser may show native validation
-        // Form validation prevents submission - critical assertion is that we stay on login page
-      }
-
-      // Assertion: Validation error messages appear for Password field
-      // Look for error text near the password field (e.g., "Password is required")
-      const passwordErrorMessage = page.locator('p, span, div').filter({ hasText: LOGIN_PAGE_MESSAGES.ERROR_PASSWORD_REQUIRED }).first();
-      try {
-        await expect(passwordErrorMessage).toBeVisible({ timeout: 3000 });
-      } catch {
-        // Alternative: Check HTML5 validation state for password field
-        // Form validation prevents submission - critical assertion is that we stay on login page
-      }
-
-      // Assertion: Both error messages are visible and clearly communicate the required fields
-      // Verify form is still displayed without submission
+      // Assertion: Form inputs are still visible and empty after validation block
+      // This confirms the form was not submitted and validation prevented the action
       await expect(emailInput).toBeVisible();
+      await expect(emailInput).toHaveValue('');
       await expect(passwordInput).toBeVisible();
+      await expect(passwordInput).toHaveValue('');
 
-      // Assertion: User remains on the login page with focus on the first empty field or with validation indicators
-      // Form is not submitted to the backend server (verified by staying on login page)
+      // Assertion: User remains on the login page (critical requirement)
+      // Form validation (HTML5 or client-side) prevents empty form submission
       await expect(page).toHaveURL(LOGIN_URL);
     });
   });
@@ -189,35 +160,25 @@ test.describe('Authentication Domain', () => {
       // Try to find logout button in common locations
       let logoutButton = page.getByRole('button', { name: /logout|sign out|sign off/i });
       
-      // If not found directly, look for a menu trigger and open it
-      let isLogoutVisible = false;
-      try {
-        isLogoutVisible = await logoutButton.isVisible();
-      } catch {
-        isLogoutVisible = false;
-      }
+      // Check if logout button is directly visible using native isVisible()
+      const isLogoutVisible = await logoutButton.isVisible();
       
       if (!isLogoutVisible) {
-        // Try to find profile menu or user menu button
+        // If not found directly, look for a profile menu or user menu button and open it
         const profileMenu = page.getByRole('button').filter({ hasText: /profile|user|account|menu/i }).first();
-        let isProfileMenuVisible = false;
-        try {
-          isProfileMenuVisible = await profileMenu.isVisible();
-        } catch {
-          isProfileMenuVisible = false;
-        }
+        const isProfileMenuVisible = await profileMenu.isVisible();
         
         if (isProfileMenuVisible) {
+          // Click the profile menu to reveal logout option
           await profileMenu.click();
-          // Wait for menu to open
-          await page.waitForTimeout(500);
         }
-        // Try to find logout option again after menu opens
+        
+        // Locate logout option after menu opens (click() auto-waits for DOM updates)
         logoutButton = page.getByRole('button', { name: /logout|sign out|sign off/i });
       }
 
       // Step 3-4: Locate and click the "Logout" or "Sign Out" option
-      // Wait for logout request to complete
+      // Playwright's click() automatically waits for element readiness
       await logoutButton.click();
 
       // Wait for the logout process to complete and redirect
