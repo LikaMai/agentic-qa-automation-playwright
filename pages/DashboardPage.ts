@@ -45,7 +45,7 @@ export class DashboardPage {
     }).first();
     
     // Accounts Section - h2 "Your accounts"
-    this.accountsSection = page.getByRole('heading', { name: /Your accounts/i }).locator('..').first();
+   this.accountsSection = this.page.getByRole('heading', { name: /Your accounts/i });
     
     // Account containers - links containing account type and amount
     this.accountContainers = page.getByRole('link').filter({
@@ -53,7 +53,7 @@ export class DashboardPage {
     });
     
     // Recent Activity Section - h2 "Recent activity"
-    this.recentActivitySection = page.getByRole('heading', { name: /Recent activity/i }).locator('..').first();
+    this.recentActivitySection = page.getByRole('heading', { name: /Recent activity/i });
     
     // Transaction entries - generic containers with transaction description and amount
     this.transactionEntries = page.locator('div').filter({

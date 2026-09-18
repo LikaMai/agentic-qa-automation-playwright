@@ -80,7 +80,7 @@ test.describe('Authentication Domain', () => {
 
       // Assertion: Email field retains the entered value for user convenience
       const emailField = page.getByPlaceholder('you@example.com');
-      await expect(emailField).toHaveValue('casey@zinc.test');
+      await expect(emailField).toHaveValue(email);
 
       // Assertion: Password field is cleared or highlighted to indicate the issue
       const passwordField = page.locator('input[type="password"]');

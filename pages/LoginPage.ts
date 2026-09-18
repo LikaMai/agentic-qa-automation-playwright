@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { LOGIN_PAGE_MESSAGES } from '../constants/loginPageMessages';
 
 export class LoginPage {
@@ -11,11 +11,11 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    // 固化经过验证的稳定定位器
+    // Hardened locators verified for stability
     this.emailInput = page.getByPlaceholder(LOGIN_PAGE_MESSAGES.EMAIL_PLACEHOLDER);
     this.passwordInput = page.locator('input[type="password"]');
     this.signInButton = page.getByRole('button', { name: LOGIN_PAGE_MESSAGES.SIGN_IN_BUTTON_LABEL });
-    // 语义化过滤定位，避开 Next.js 隐藏的读屏标签
+    // Semantic filtering locator, bypasses Next.js hidden accessibility labels
     this.errorBanner = page.locator('p, span, div').filter({ 
       hasText: LOGIN_PAGE_MESSAGES.ERROR_INVALID_CREDENTIALS
     });
@@ -24,9 +24,9 @@ export class LoginPage {
   /**
    * Navigate to the login page
    */
- async goto() {
-     await this.page.goto(this.LOGIN_URL);
- }
+  async goto() {
+    await this.page.goto(this.LOGIN_URL, { waitUntil: 'domcontentloaded' });
+  }
 
   /**
    * Perform a login action with provided credentials
@@ -46,6 +46,7 @@ export class LoginPage {
       );
     }
 
+    await expect(this.emailInput).toBeVisible();
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await Promise.all([
