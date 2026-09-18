@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class DashboardPage {
   readonly page: Page;
@@ -86,11 +86,11 @@ export class DashboardPage {
     await this.welcomeHeading.waitFor({ state: 'visible', timeout: 5000 });
     
     // Verify accounts and balance sections exist
-    await this.totalBalanceCard.waitFor({ state: 'visible', timeout: 5000 });
-    await this.accountsSection.waitFor({ state: 'visible', timeout: 5000 });
+    await expect(this.totalBalanceCard).toBeVisible();
+    await expect(this.accountsSection).toBeVisible();
     
     // Verify recent activity section exists
-    await this.recentActivitySection.waitFor({ state: 'visible', timeout: 5000 });
+    await expect(this.recentActivitySection).toBeVisible();
   }
 
   /**
