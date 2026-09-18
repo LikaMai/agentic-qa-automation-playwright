@@ -7,7 +7,7 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly signInButton: Locator;
   readonly errorBanner: Locator;
-  readonly LOGIN_URL = 'https://zincbank.cydeo.io/login';
+  readonly LOGIN_URL = process.env.BASE_URL || 'https://zincbank.cydeo.io/login';
 
   constructor(page: Page) {
     this.page = page;
@@ -24,9 +24,9 @@ export class LoginPage {
   /**
    * Navigate to the login page
    */
-  async goto() {
-    await this.page.goto(this.LOGIN_URL);
-  }
+ async goto() {
+     await this.page.goto(this.LOGIN_URL);
+ }
 
   /**
    * Perform a login action with provided credentials
