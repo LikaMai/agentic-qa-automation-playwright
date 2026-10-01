@@ -28,6 +28,10 @@ pipeline {
     choice(name: 'REPORT_FORMAT', choices: ['html', 'junit', 'both'], description: 'Report format')
   }
 
+tools {
+        nodejs 'NodeJS-20'
+    }
+    
   environment {
     NODE_ENV = 'test'
     NODE_OPTIONS = '--max_old_space_size=4096'
