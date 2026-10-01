@@ -151,6 +151,14 @@ EOF
     always {
       junit(allowEmptyResults: true, testResults: 'test-results/**/*.xml')
       archiveArtifacts(artifacts: 'playwright-report/**/*,test-results/**/*,test-artifacts/**/*', allowEmptyArchive: true, fingerprint: true)
+      publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright HTML Report'
+            ])
       sh '''
         echo "[INFO] Build Summary:"
         echo "Build #: ${BUILD_NUMBER}"
