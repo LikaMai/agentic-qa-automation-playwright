@@ -63,6 +63,7 @@ tools {
           node --version || { echo "[ERROR] Node.js not found"; exit 1; }
           npm --version || { echo "[ERROR] npm not found"; exit 1; }
         '''
+        
       }
     }
 
@@ -74,6 +75,8 @@ tools {
             echo "[ERROR] Failed to install dependencies"
             exit 1
           }
+          echo "[INFO] Installing Playwright Chromium browser..."
+                    npx playwright install chromium
         '''
       }
     }
