@@ -31,7 +31,7 @@ pipeline {
 tools {
         nodejs 'NodeJS-20'
     }
-    
+
   environment {
     NODE_ENV = 'test'
     NODE_OPTIONS = '--max_old_space_size=4096'
@@ -151,7 +151,7 @@ EOF
       sh '''
         echo "[INFO] Build Summary:"
         echo "Build #: ${BUILD_NUMBER}"
-        [ -d "playwright-report" ] && echo "Report: playwright-report/index.html"
+        [ -d "playwright-report" ] && echo "Report: playwright-report/index.html" || true
       '''
     }
     
