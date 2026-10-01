@@ -102,7 +102,7 @@ EOF
           echo "[INFO] Running API tests: tests/api/accounts_api.spec.ts"
           npx playwright test tests/api/accounts_api.spec.ts \
             --reporter=json,html,junit \
-            --reporter-option outputFile=test-results/api-junit.xml || true
+           npx playwright test tests/api/accounts_api.spec.ts --reporter=list,html
         '''
       }
     }
@@ -116,7 +116,7 @@ EOF
           echo "[INFO] Running UI tests..."
           npx playwright test tests/01_auth.spec.ts tests/02_accounts.spec.ts \
             --reporter=json,html,junit \
-            --reporter-option outputFile=test-results/ui-junit.xml || true
+            npx playwright test tests/01_auth.spec.ts tests/02_accounts.spec.ts --reporter=list,html
         '''
       }
     }
